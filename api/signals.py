@@ -18,7 +18,11 @@ def set_title_id(sender, instance=None, created=False, **kwargs):
 @receiver(post_save, sender=Job)
 def get_skill(sender, instance=None, created=False, **kwargs):
     if created:
-        url='http://api.dataatwork.org/v1/jobs/{}/related_skills'.\
-            format(instance.title_id)
+        url = 'http://api.dataatwork.org/v1/jobs/{}/related_skills'.\
+              format(instance.title_id)
         response = requests.get(url)
         skills = response.json()
+        skill_list = skills['skills']
+        # Skill.objects.create(**skill_list)
+
+
