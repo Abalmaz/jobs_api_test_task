@@ -1,7 +1,7 @@
 import difflib
 import uuid
-
 import requests
+
 from django.db import models
 
 
@@ -26,9 +26,7 @@ class Skill(models.Model):
 class Job(models.Model):
     title = models.CharField(unique=True, max_length=100)
     location = models.CharField(max_length=100)
-    title_id = models.UUIDField(default=uuid.uuid4,
-                                editable=False,
-                                unique=True)
+    title_id = models.CharField(max_length=50)
     skills = models.ManyToManyField(Skill)
 
     @property
@@ -51,3 +49,18 @@ class Job(models.Model):
         matches_job = next(job for job in job_list if
                            job['normalized_job_title'] == match_job)
         return matches_job
+
+    def find_related_skills(self):
+        url = 'http://api.dataatwork.org/v1/jobs/{}/related_skills'\
+            .format(self.title_id)
+        try:
+            response = requests.get(url)
+            if response:
+                skills = response.json()['skills']
+                return skills
+            else:
+                raise ValueError('failed to get response')
+        except (ValueError, Exception) as e:
+            return False, e
+
+

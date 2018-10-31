@@ -36,7 +36,9 @@ class SkillModelTest(TestCase):
 class JobModelTest(TestCase):
     def setUp(self):
         self.job1 = Job.objects.create(title='Software Engineer',
-                                       location='New York')
+                                       location='New York',
+                                       title_id=
+                                       "6b0b1cc3de799472d984e6346b929e51")
         self.job2 = Job.objects.create(title=' SoftWare   ARCHITECT  ',
                                        location='Los Angles')
 
@@ -63,4 +65,9 @@ class JobModelTest(TestCase):
         job = Job.objects.get(id=1)
         result = job.find_match_closest_job()
         self.assertEquals("software engineer", result['normalized_job_title'])
+
+    def test_find_related_skills(self):
+        job = Job.objects.get(id=1)
+        result = job.find_related_skills()
+        self.assertEquals(119, len(result))
 
