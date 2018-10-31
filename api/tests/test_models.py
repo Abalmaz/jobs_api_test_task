@@ -8,13 +8,13 @@ class SkillModelTest(TestCase):
         self.skill1 = Skill.objects.create(name='Time Management',
                                            description="managing one's own time"
                                                        "and the time of others",
-                                           importance=3.5,
-                                           level=6)
+                                           importance=3.94,
+                                           level=4.91)
 
         self.skill2 = Skill.objects.create(name='  ActivE    LearninG ',
                                            description="tests skill",
-                                           importance=6.5,
-                                           level=1)
+                                           importance=3.88,
+                                           level=4)
 
     def test_name_max_length(self):
         max_length = self.skill1._meta.get_field('name').max_length
@@ -25,6 +25,12 @@ class SkillModelTest(TestCase):
         skill2 = Skill.objects.get(id=2)
         self.assertEquals("time management", skill1.normalized_name)
         self.assertEquals("active learning", skill2.normalized_name)
+
+    def test_scope_correct_value(self):
+        skill1 = Skill.objects.get(id=1)
+        skill2 = Skill.objects.get(id=2)
+        self.assertEquals(6.1, skill1.scope)
+        self.assertEquals(5.5, skill2.scope)
 
 
 class JobModelTest(TestCase):

@@ -18,7 +18,7 @@ class Skill(models.Model):
 
     @property
     def scope(self):
-        return
+        return round(0.4*(self.importance*2) + 0.6 * self.level, 2)
 
 
 class Job(models.Model):
