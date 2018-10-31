@@ -53,3 +53,14 @@ class JobModelTest(TestCase):
         job2 = Job.objects.get(id=2)
         self.assertEquals("software engineer", job1.normalized_title)
         self.assertEquals("software architect", job2.normalized_title)
+
+    def test_find_job_is_correct(self):
+        job = Job.objects.get(id=1)
+        result = job.find_job()
+        self.assertEquals(3, len(result))
+
+    def test_find_match_closest_job_is_correct(self):
+        job = Job.objects.get(id=1)
+        result = job.find_match_closest_job()
+        self.assertEquals("software engineer", result['normalized_job_title'])
+

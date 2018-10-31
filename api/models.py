@@ -1,5 +1,7 @@
+import difflib
 import uuid
 
+import requests
 from django.db import models
 
 
@@ -32,3 +34,20 @@ class Job(models.Model):
     @property
     def normalized_title(self):
         return " ".join(self.title.lower().split())
+
+    def find_job(self):
+        url = 'http://api.dataatwork.org/v1/jobs/autocomplete'
+        params = {'begins_with': self.title}
+        response = requests.get(url, params=params)
+        return response.json()
+
+    def find_match_closest_job(self):
+        job_list = self.find_job()
+        list_for_matches = []
+        for job in job_list:
+            list_for_matches.append(job['normalized_job_title'])
+        match_job = difflib.get_close_matches(self.normalized_title,
+                                              list_for_matches)[0]
+        matches_job = next(job for job in job_list if
+                           job['normalized_job_title'] == match_job)
+        return matches_job

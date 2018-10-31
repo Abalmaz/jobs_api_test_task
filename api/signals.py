@@ -4,15 +4,12 @@ from django.dispatch import receiver
 
 from .models import Job, Skill
 
-#
-# @receiver(pre_save, sender=Job)
-# def set_title_id(sender, instance=None, created=False, **kwargs):
-#     if created:
-#         url = 'http://api.dataatwork.org/v1/jobs/autocomplete'
-#         params = {'begins_with': instance.title}
-#         response = requests.get(url, params=params)
-#         job_api = response.json()[0]
-#         instance.title_id = job_api['uuid']
+
+@receiver(pre_save, sender=Job)
+def set_title_id(sender, instance=None, created=False, **kwargs):
+    if created:
+        find_job = instance.find_match_closest_job()
+        instance.title_id = find_job['uuid']
 
 
 # @receiver(post_save, sender=Job)
