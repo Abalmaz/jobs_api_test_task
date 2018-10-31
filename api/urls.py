@@ -1,6 +1,7 @@
 from django.urls import path
 
+from api import views
 
 urlpatterns = [
-    path('jobs', ),
+    path('jobs', views.JobList.as_view()),
  ]
