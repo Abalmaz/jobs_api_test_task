@@ -1,10 +1,10 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import Job, Skill
 
 
-@receiver(pre_save, sender=Job)
+@receiver(post_save, sender=Job)
 def set_title_id(sender, instance=None, created=False, **kwargs):
     if created:
         find_job = instance.find_match_closest_job()
